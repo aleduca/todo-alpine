@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo list</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div x-data="todo()" class="container">
+
+    <h2>To-Do List <span x-text="tasks.length"></span> </h2>
+
+    <div id="todo-input">
+      <input type="text" x-model="task" x-on:keydown.enter="addTask">
+      <button @click="addTask">Add Task</button>
+    </div>
+
+    <div id="task-status">
+      <div>Tarefas Feitas: <span x-text="taskStatus.completed"></span></div>
+      <div>Tarefas não feitas: <span x-text="taskStatus.incompleted"></span></div>
+    </div>
+
+    <ul id="todo-list">
+      <template x-for="(todo, index) in tasks" :key="index">
+        <div class="todo" >
+          <li :class="{'checked': todo.completed === true}" x-text="`${index} ${todo.name} ${todo.completed}`"></li>
+          <input type="checkbox" @click="checkTask(todo)" x-model="todo.completed">
+          <button @click="removeTask(todo)">Remove Task</button>
+        </div>
+      </template>
+    </ul>
+
+  </div>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.8.1/alpine.js' integrity='sha512-b9Ky6j5vwZQAJ0sS9MicOFpkzN8wY6Yjkxap5UaNC4T3MDAzUBN0K6goEFGwN3eNfk4IbqQ8LvnSPnlothE0Bg==' crossorigin='anonymous'></script>
+
+
+  <script>
+    function todo(){
+      return {
+        tasks:[],
+        task:'',
+        taskStatus: {
+          completed:0,
+          incompleted:0
+        },
+
+        taskNameExist: function(){
+          return this.tasks.find(task => {
+            return task.name === this.task
+          })
+        },
+
+        addTask: function(){
+          if(this.taskNameExist()){
+            alert('Task já existe');
+            return;
+          }
+
+          if(this.task === ''){
+            alert('Digite uma task');
+            return;
+          }
+
+          this.tasks.push({
+            id: Math.floor(Math.random() * new Date().getTime()),
+            name: this.task,
+            completed: false
+          });
+
+          this.task = '';
+
+          this.statusTasks();
+        },
+
+        statusTasks: function(){
+          this.taskStatus = this.tasks.reduce((acc, task) => {
+            (task.completed) ? acc['completed']+=1 : acc['incompleted']+=1;
+            return acc;
+          },{completed:0, incompleted:0})
+        },
+
+        checkTask: function(todo){
+          const index = this.tasks.findIndex(task => {
+            return task.id === todo.id;
+          })
+
+          this.tasks[index]['completed'] = !this.tasks[index]['completed'];
+
+          this.statusTasks();
+        },
+
+        removeTask: function(todo){
+          const index = this.tasks.findIndex(task => {
+            return task.id === todo.id;
+          });
+
+          this.tasks.splice(index,1);
+
+          this.statusTasks();
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

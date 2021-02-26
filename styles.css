@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap");
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+.container {
+  flex: 1;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+#todo-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: chartreuse;
+  padding: 10px;
+}
+
+#todo-list {
+  width: 300px;
+  list-style: none;
+}
+
+.todo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  margin-bottom: 5px;
+  background-color: greenyellow;
+}
+
+#task-status {
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.checked {
+  text-decoration: line-through;
+}
